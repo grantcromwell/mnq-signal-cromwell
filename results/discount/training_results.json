@@ -1,0 +1,25 @@
+{
+  "training_date": "2026-01-15T23:40:39.803426",
+  "data_info": {
+    "train_size": 1154,
+    "val_size": 289,
+    "num_features": 14,
+    "class_distribution": {
+      "failures": 808,
+      "successes": 346
+    },
+    "class_weights": [
+      0.7001733183860779,
+      0.2998266816139221
+    ]
+  },
+  "final_metrics": {
+    "val_loss": 0.43350780606269834,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "accuracy": 0.698961937716263,
+    "avg_confidence": "0.1668148"
+  },
+  "confidence_threshold": 0.8
+}

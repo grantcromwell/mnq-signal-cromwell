@@ -1,0 +1,70 @@
+# Correlation Assets Configuration
+# All futures contracts for correlation ring analysis
+
+ring1_us_equity:
+  - symbol: "MNQ"
+    secType: "FUT"
+    exchange: "CME"
+    currency: "USD"
+    conId: 69790071  # IBKR contract ID for MNQ
+    name: "Micro Nasdaq 100"
+
+  - symbol: "ES"
+    secType: "FUT"
+    exchange: "CME"
+    currency: "USD"
+    conId: 69598622
+    name: "E-mini S&P 500"
+
+  - symbol: "NQ"
+    secType: "FUT"
+    exchange: "CME"
+    currency: "USD"
+    conId: 69598612
+    name: "E-mini Nasdaq 100"
+
+  - symbol: "RTY"
+    secType: "FUT"
+    exchange: "CME"
+    currency: "USD"
+    conId: 69598591
+    name: "E-mini Russell 2000"
+
+ring2_global:
+  - symbol: "CL"
+    secType: "FUT"
+    exchange: "CME"
+    currency: "USD"
+    conId: 69790055
+    name: "Crude Oil"
+
+  - symbol: "GC"
+    secType: "FUT"
+    exchange: "CME"
+    currency: "USD"
+    conId: 69790052
+    name: "Gold"
+
+  - symbol: "ZB"
+    secType: "FUT"
+    exchange: "CME"
+    currency: "USD"
+    conId: 69790056
+    name: "Treasury Bonds"
+
+  - symbol: "6E"
+    secType: "FUT"
+    exchange: "CME"
+    currency: "USD"
+    conId: 69790059
+    name: "Euro/USD"
+
+  - symbol: "FDAX"
+    secType: "FUT"
+    exchange: "Eurex"
+    currency: "EUR"
+    conId: 69790063
+    name: "German DAX"
+
+# Default trading hours (IBKR format)
+default_trading_hours: "CME Globex: Sun 18:00-Fri 17:00 ET"

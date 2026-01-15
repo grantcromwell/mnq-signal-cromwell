@@ -1,0 +1,49 @@
+# Virtual Environment
+venv/
+.venv/
+env/
+.env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.eggs/
+.dist-info/
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Results & Backtests (regenerate with fresh data)
+results/trained/
+results/walkforward/
+backtest.csv
+backtest_result.json
+current_signal.json
+
+# Large data files (regenerate from yfinance)
+data/mnq_yfinance.csv
+data/*_yfinance.csv
+
+# Model checkpoints
+checkpoints/
+*.pt
+*.ckpt
+
+# Environment file (create .env.example instead)
+.env
+
+# Temporary files
+*.tmp
+*.log
+logs/

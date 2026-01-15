@@ -1,0 +1,183 @@
+# MNQ Trading Signal System Configuration
+# ========================================
+
+# IBKR Connection Settings
+ibkr:
+  host: "127.0.0.1"
+  port: 7497  # TWS paper trading
+  client_id: 1
+  read_timeout: 60
+
+# Alpha Vantage News Sentiment API
+alpha_vantage:
+  api_key: "${ALPHA_VANTAGE_API_KEY}"
+  rate_limit: 5  # requests per minute (free tier)
+  cache_ttl: 300  # seconds
+  topics:
+    - "technology"
+    - "financial_markets"
+    - "economy_macro"
+
+# Redis Cache Settings
+redis:
+  host: "localhost"
+  port: 6379
+  password: null
+  db: 0
+  key_prefix: "mnq:signal:"
+  ttl_days: 14  # 2-week rolling cache
+
+# MNQ Contract Definition
+mnq:
+  symbol: "MNQ"
+  secType: "FUT"
+  exchange: "CME"
+  currency: "USD"
+  multiplier: 0.5  # Micro contract = 0.5 USD per point
+  tick_size: 1.0
+  trading_hours: "CME Globex: Sun 18:00-Fri 17:00 ET"
+
+# Trading Hours (EST)
+trading_hours:
+  start: 3  # 3 AM EST
+  end: 15   # 3 PM EST
+  timezone: "America/New_York"
+
+# Position Sizing Parameters
+position_sizing:
+  risk_per_trade: 0.20  # 20% risk per trade
+  max_contracts: 12
+  min_contracts: 1
+  contract_multiplier: 0.5
+  kelly_fraction: 0.5
+  volatility_target: 0.02
+
+# Correlation Ring Assets
+correlation_assets:
+  ring1:  # US Equity Futures (directly correlated)
+    - symbol: "ES"
+      secType: "FUT"
+      exchange: "CME"
+      currency: "USD"
+    - symbol: "NQ"
+      secType: "FUT"
+      exchange: "CME"
+      currency: "USD"
+    - symbol: "RTY"
+      secType: "FUT"
+      exchange: "CME"
+      currency: "USD"
+  ring2:  # Global/Commodity (indirectly correlated)
+    - symbol: "CL"
+      secType: "FUT"
+      exchange: "CME"
+      currency: "USD"
+    - symbol: "GC"
+      secType: "FUT"
+      exchange: "CME"
+      currency: "USD"
+    - symbol: "ZB"
+      secType: "FUT"
+      exchange: "CME"
+      currency: "USD"
+    - symbol: "6E"
+      secType: "FUT"
+      exchange: "CME"
+      currency: "USD"
+    - symbol: "FDAX"
+      secType: "FUT"
+      exchange: "Eurex"
+      currency: "EUR"
+
+# Data Settings
+data:
+  timeframes:
+    - interval: "1m"
+      bars: 1440  # 1 day of 1-min bars
+    - interval: "5m"
+      bars: 288   # 1 day of 5-min bars
+    - interval: "15m"
+      bars: 96    # 1 day of 15-min bars
+    - interval: "1h"
+      bars: 24    # 1 day of hourly bars
+  history_days: 14  # 2 weeks for correlation computation
+  warmup_bars: 100  # Bars needed before generating signals
+
+# GAF Encoding Settings
+gaf:
+  resolution: 64  # 64x64 per day
+  days_3: 3       # 3-day GAF for main encoding
+  days_week: 5    # Week GAF for context
+  channels: 3     # OHC (Open, High, Close)
+  gaf_type: "gasf"  # gramian angular summation field
+  normalize: true
+  rescale: true
+
+# VL-JEPA Model Settings
+model:
+  vision:
+    encoder: "vit_base_patch16_224"
+    pretrained: "imagenet21k"
+    embed_dim: 768
+    num_heads: 12
+    num_layers: 12
+    mlp_dim: 3072
+    dropout: 0.2
+  text:
+    encoder: "bert-base-uncased"
+    embed_dim: 768
+    num_layers: 6
+    num_heads: 8
+    hidden_dim: 1024
+    dropout: 0.2
+  predictor:
+    input_dim: 1536  # vision + text concatenated
+    hidden_dim: 1024
+    output_dim: 128
+    num_layers: 2
+    dropout: 0.3
+  classifier:
+    input_dim: 128
+    hidden_dim: 64
+    num_classes: 2  # long, flat
+    dropout: 0.3
+
+# Training Settings
+training:
+  batch_size: 32
+  learning_rate: 1e-4
+  weight_decay: 0.05
+  warmup_steps: 1000
+  max_steps: 100000
+  jepa_epochs: 100
+  sft_epochs: 50
+  label_definition: "3:1_rr_success"
+  risk_reward_ratio: 3.0
+  label_smoothing: 0.1
+  mixup_alpha: 0.2
+  cutmix_alpha: 0.3
+
+# Signal Generation Settings
+signal:
+  frequency: "15m"
+  confidence_threshold_long: 0.65
+  confidence_threshold_short: 0.70
+  sentiment_threshold: 0.1
+  sentiment_strong_bullish: 0.3
+  sentiment_strong_bearish: -0.3
+  min_relevance: 0.3
+  regime_filter: true
+
+# Risk Management
+risk_management:
+  max_daily_loss: 0.05  # 5% max daily loss
+  max_consecutive_losses: 5
+  max_trades_per_day: 10
+  circuit_breaker_pct: 0.03  # 3% drawdown stops trading
+
+# Output Settings
+output:
+  log_level: "INFO"
+  save_dir: "checkpoints"
+  experiment_name: "mnq_vjepa_signal_sentiment"
+  results_dir: "results"
