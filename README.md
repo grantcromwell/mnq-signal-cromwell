@@ -153,7 +153,7 @@ python main.py --mode train --phase sft --data data/mnq_yfinance.csv
 
 ## Sponsor
 
-[MicroCromwell.org](https://mycromwell.org) - Supporting quantitative trading research and development.
+[MyCromwell.org](https://mycromwell.org) - Supporting quantitative trading research and development.
 
 ## License
 
